@@ -10,6 +10,10 @@ Chip-48 inspired a whole new crop of Chip-8 interpreters for various platforms, 
 
 *- copied from [Technical Reference](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3xkk)*
 
+## Implementation
+
+Chip 8 TS is usig immutable library. There're several advantages of using immutable in this project. One of them is thah every instructions will create new state, so you can iterate over all instructions backwards. It's not good choice to using immutable in project like this, but it's just experiment.
+
 ## Run
 
 To run app, type in terminal
@@ -23,6 +27,6 @@ and then open `localhost:8080` in browser
 
 ## Credits
 
-In order to create Chip 8 emulator, you need read [Technical Reference](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3xkk) how Chip-8 first
+In order to create Chip 8 emulator, you should read [Technical Reference](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM#3xkk) how Chip-8 works first
 
 I also found article [Javascript Chip-8 Emulator](http://blog.alexanderdickson.com/javascript-chip-8-emulator) as source of good informations

@@ -1,79 +1,58 @@
 /// <reference path="./IChip8State"/>
-import Instructions from './Instructions.ts';
+
+import Instructions from './Instructions';
+import {getNible} from './ArgParser';
+
+const subRoutineTable = ({
+   0x0: Instructions.LD,    // !
+   0x1: Instructions.OR,
+   0x2: Instructions.AND,
+   0x3: Instructions.XOR,
+   0x4: Instructions.ADD,   // !
+   0x5: Instructions.SUB,
+   0x6: Instructions.SHR,
+   0x7: Instructions.SUBN,
+   0xE: Instructions.SHL, 
+});
+
+const codeTable = ({
+   0x1: Instructions.JP,
+   0x2: Instructions.CALL,
+   0x3: Instructions.SE,
+   0x4: Instructions.SNE,
+   0x5: Instructions.SER,
+   0x6: Instructions.LD,
+   0x7: Instructions.ADD,
+   0x8: (state: IChip8State, data: number) => subRoutineTable[getNible(data)](state, data)
+});
 
 /**
  * Get empty state of 8Bit
  * @return {IChip8State} empty state
  */
 const emptyState = (): IChip8State => ({
-    p_ptr: 0,                   // Program pointer
-    memory: new Array(4096),    // Memory
+    p_ptr: 0x0,                   // Program pointer
+    memory: new Array(0x1000),    // Memory, 4096b
     
-    s_ptr: 0,                   // Stack pointer              
-    stack: new Array(16),       // Stack
+    s_ptr: 0x0,                   // Stack pointer              
+    stack: new Array(0x10),       // Stack, 16b
     
-    reg_v: new Array(16),       // Register v
-    reg_i: 0,                   // Register i
+    reg_v: new Array(0x10),       // Register v, 16b
+    reg_i: 0x0,                   // Register i
     
-    delayTimer: 0,
-    soundTimer: 0
+    delayTimer: 0x0,
+    soundTimer: 0x0
 });
 
 /**
- * Execute operation code with data on state
- * @param {IChip8State} state - current state
- * @param {number} opCode - operation code to execute 
- * @param {number} data - data passed as argument to opCode
- * @return {IChip8State} next state
- */
-const executeCode = (state: IChip8State, opCode: number, data: number): IChip8State => {
-    const addr: number = data,
-        n: number = (opCode & 0x00F),
-        x: number = (opCode & 0xF00) >> 8,
-        y: number = (opCode & 0x0F0) >> 4,
-        kk: number = (opCode & 0x0FF);
-    
-    switch(opCode){
-        case 0:
-            break;
-        case 1: 
-            return Instructions.JP(state, addr); 
-        case 2: 
-            return Instructions.CALL(state, addr);
-        case 3:
-            return Instructions.SE(state, x, kk);
-        case 4:
-            return Instructions.SNE(state, x, kk);
-        case 5:
-            return Instructions.SER(state, x, y);
-        case 6:
-            return Instructions.LD(state, x, kk);
-        case 7:
-            return Instructions.ADD(state, x, kk);
-        case 8:
-            switch (n) {
-                
-            }
-        default: throw new Error(`Operation doesn't exists: ${opCode}`);
-    };
-};
-
-/**
- * Process instruction over state 
+ * Process instruction with state 
  * @param {IChip8State} state - current state 
  * @param {number} instruction - instruction to process 
  * @return {IChip8State} next state 
  */
 const processInst = (state: IChip8State, instruction: number): IChip8State => {
-    const code: number = (instruction & 0xF000) >> 12,
+    const opCode: number = (instruction & 0xF000) >> 12,
         data: number = (instruction & 0x0FFF);
 
-    return executeCode(state, code, data);
+    return codeTable[opCode](state, data);
 };
-
-// CODE
-
-const state = emptyState();
-console.log(state.p_ptr);
-console.log(processInst(emptyState(), 0x100F));
-console.log('xoms');

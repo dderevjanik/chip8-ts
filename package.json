@@ -18,5 +18,13 @@
   "bugs": {
     "url": "https://github.com/dderevjanik/chip8-ts/issues"
   },
-  "homepage": "https://github.com/dderevjanik/chip8-ts#readme"
+  "homepage": "https://github.com/dderevjanik/chip8-ts#readme",
+  "devDependencies": {
+    "babel-core": "^6.4.0",
+    "babel-loader": "^6.2.1",
+    "immutable": "^3.7.6",
+    "karma": "^0.13.19",
+    "ts-loader": "^0.8.0",
+    "webpack": "^1.12.11"
+  }
 }

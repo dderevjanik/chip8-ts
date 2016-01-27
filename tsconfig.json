@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
         "target": "es5",
-        "sourceMap": true
+        "module": "commonjs"
     },
     "files": [
         "src/Chip8.ts",
-        "src/Instructions.ts"
+        "src/Instructions.ts",
+        "src/ArgParser.ts",
+        "src/Consts.ts"
     ]
 }
